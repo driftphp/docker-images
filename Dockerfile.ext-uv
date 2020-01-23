@@ -1,0 +1,8 @@
+FROM alpine:3.10 as extension
+RUN apk --no-cache add php7-pear php7-dev php7-openssl gcc musl-dev make libuv-dev
+RUN pecl install uv-0.2.4
+
+FROM drift/base
+RUN apk --no-cache add libuv libuv-dev
+COPY --from=extension /usr/lib/php7/modules/uv.so /usr/lib/php7/modules/uv.so
+RUN echo extension=uv.so >> /etc/php7/conf.d/20_uv.ini

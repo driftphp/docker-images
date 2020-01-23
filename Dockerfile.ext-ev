@@ -1,0 +1,7 @@
+FROM alpine:3.10 as extension
+RUN apk --no-cache add php7-pear php7-dev php7-openssl gcc musl-dev make
+RUN pecl install ev
+
+FROM driftphp/base
+COPY --from=extension /usr/lib/php7/modules/ev.so /usr/lib/php7/modules/ev.so
+RUN echo extension=ev.so >> /etc/php7/conf.d/20_ev.ini
