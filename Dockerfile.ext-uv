@@ -1,8 +1,9 @@
-FROM alpine:3.10 as extension
-RUN apk --no-cache add php7-pear php7-dev php7-openssl gcc musl-dev make libuv-dev
+FROM driftphp/base as extension
+RUN apk --no-cache add autoconf build-base libuv-dev
+RUN pecl channel-update pecl.php.net
 RUN pecl install uv-0.2.4
 
-FROM drift/base
+FROM driftphp/base
 RUN apk --no-cache add libuv libuv-dev
-COPY --from=extension /usr/lib/php7/modules/uv.so /usr/lib/php7/modules/uv.so
-RUN echo extension=uv.so >> /etc/php7/conf.d/20_uv.ini
+COPY --from=extension /usr/local/lib/php/extensions/no-debug-non-zts-20190902/uv.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/uv.so
+RUN docker-php-ext-enable uv

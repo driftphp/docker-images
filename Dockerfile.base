@@ -6,19 +6,20 @@ RUN apk --no-cache add \
 RUN curl -sS https://getcomposer.org/installer | php
 
 
-FROM alpine:3.10
+FROM php:7.4-cli-alpine
 WORKDIR /var/www
 
 #
 # Dependencies
 #
 RUN apk --no-cache add \
-    libzip-dev zip gnupg \
-    php7 php7-cgi php7-curl php7-opcache php7-zip \
-    php7-bcmath php7-pcntl php7-redis php7-json \
-    php7-phar php7-mbstring php7-openssl php7-xml \
-    php7-tokenizer php7-dom php7-xmlwriter php7-posix \
-    php7-sockets php7-fileinfo
+    libzip-dev zip gnupg openssl-dev
+
+RUN docker-php-source extract
+RUN cp /usr/src/php/ext/openssl/config0.m4 /usr/src/php/ext/openssl/config.m4
+RUN docker-php-ext-configure openssl
+
+RUN docker-php-ext-install opcache zip bcmath pcntl sockets
 
 #
 # Composer

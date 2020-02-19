@@ -1,7 +1,8 @@
-FROM alpine:3.10 as extension
-RUN apk --no-cache add php7-pear php7-dev php7-openssl gcc musl-dev make
+FROM driftphp/base as extension
+RUN apk --no-cache add autoconf build-base
+RUN pecl channel-update pecl.php.net
 RUN pecl install ev
 
 FROM driftphp/base
-COPY --from=extension /usr/lib/php7/modules/ev.so /usr/lib/php7/modules/ev.so
-RUN echo extension=ev.so >> /etc/php7/conf.d/20_ev.ini
+COPY --from=extension /usr/local/lib/php/extensions/no-debug-non-zts-20190902/ev.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/ev.so
+RUN docker-php-ext-enable ev

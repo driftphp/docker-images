@@ -1,8 +1,8 @@
-FROM driftphp:ext-event
+FROM driftphp/ext-uv
 
 COPY . /var/www
 
 RUN rm /usr/bin/composer
 
 EXPOSE 8000
-CMD ["/usr/bin/php", "/var/www/server.php"]
+CMD ["/usr/local/bin/php", "/var/www/server.php"]

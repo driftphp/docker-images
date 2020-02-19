@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 use React\EventLoop\Factory;
 use React\Http\Server;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,4 +32,8 @@ $server = new Server(function (ServerRequestInterface $request) {
 $socket = new React\Socket\Server("0.0.0.0:8000", $loop);
 $server->listen($socket);
 
-$loop->run();
+try {
+    $loop->run();
+} catch (\Throwable $trowable) {
+    echo $trowable->getMessage();
+}
