@@ -16,9 +16,6 @@ RUN apk --no-cache add \
     libzip-dev zip gnupg openssl-dev
 
 RUN docker-php-source extract
-RUN cp /usr/src/php/ext/openssl/config0.m4 /usr/src/php/ext/openssl/config.m4
-RUN docker-php-ext-configure openssl
-
 RUN docker-php-ext-install opcache zip bcmath pcntl sockets
 
 #

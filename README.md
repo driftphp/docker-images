@@ -19,7 +19,7 @@ You can check all available loop implementations in
 - ExtEventLoop - *driftphp/ext-event*
 - ExtEvLoop - *driftphp/ext-ev*
 
-## Using
+## Usage
 
 You can use these images by extending them in your Dockerfile. In these images
 you'll find
