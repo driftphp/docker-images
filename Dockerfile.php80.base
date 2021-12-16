@@ -1,0 +1,24 @@
+FROM alpine:3.11
+WORKDIR /var/www
+RUN apk --no-cache add \
+    curl php7 php7-phar php7-json \
+    php7-iconv php7-openssl
+RUN curl -sS https://getcomposer.org/installer | php
+
+
+FROM php:8.0-cli-alpine
+WORKDIR /var/www
+
+#
+# Dependencies
+#
+RUN apk --no-cache add \
+    libzip-dev zip gnupg openssl-dev
+
+RUN docker-php-source extract
+RUN docker-php-ext-install opcache zip bcmath pcntl sockets
+
+#
+# Composer
+#
+COPY --from=0 /var/www/composer.phar /usr/bin/composer
